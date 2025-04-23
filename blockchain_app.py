@@ -3,6 +3,8 @@ import time
 import hashlib
 import json
 
+st.set_page_config(page_title="Simple Blockchain", layout="centered")
+
 # Initialize session state for blockchain
 if "blockchain" not in st.session_state:
     st.session_state.blockchain = [
@@ -35,17 +37,19 @@ def add_block(data):
     st.session_state.blockchain.append(new_block)
     st.success(f"✅ Block {index} added successfully!")
 
-# Streamlit UI
+# --- UI Starts Here ---
 st.title("📦 Simple Blockchain Demo")
 
-user_data = st.text_input("Enter data for the new block:")
+with st.form("block_form"):
+    user_data = st.text_input("📝 Enter data for the new block:")
+    submitted = st.form_submit_button("Add Block")
 
-if st.button("Add Block"):
-    if user_data:
-        add_block(user_data)
-    else:
-        st.warning("⚠️ Please enter some data before adding a block.")
+    if submitted:
+        if user_data.strip():
+            add_block(user_data)
+        else:
+            st.warning("⚠️ Please enter some data before adding a block.")
 
-# Display the blockchain
+# Always show blockchain
 st.subheader("📜 Blockchain")
 st.json(st.session_state.blockchain)
